@@ -1,66 +1,112 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue"
+  import { ref, onMounted, onBeforeUnmount, computed } from "vue"
+  import { useTheme } from "../../composables/useTheme.js"
 
-const openLang = ref(false)
-const openMenu = ref(false)
+  const openLang = ref(false)
+  const openMenu = ref(false)
+  const { theme, toggleTheme } = useTheme()
 
-const closeAll = (e) => {
-  if (!e.target.closest(".lang-menu")) openLang.value = false
-}
+  const closeLang = e => { if (!e.target.closest(".lang-menu")) openLang.value = false }
+  onMounted(() => document.addEventListener("click", closeLang))
+  onBeforeUnmount(() => document.removeEventListener("click", closeLang))
 
-onMounted(() => document.addEventListener("click", closeAll))
-onBeforeUnmount(() => document.removeEventListener("click", closeAll))
+  /* ✅ THE ONLY NEW THING */
+  const navText = computed(() =>
+    theme.value === "light"
+      ? "text-[#ec4899] hover:text-[#d1d5db] transition"
+      : "text-[#d1d5db] hover:text-[#ec4899] transition"
+  )
 </script>
 
 <template>
   <header class="w-full py-3 relative">
-    <!-- DESKTOP NAV -->
-    <nav class="hidden md:flex justify-center items-center gap-9 text-md font-medium">
-      <router-link to="/" exact-active-class="text-pink-400 uppercase font-bold" class="text-gray-300 hover:text-pink-400 transition hover:underline"><span class="text-pink-400">#</span>home</router-link>
-      <router-link to="/projects" active-class="text-pink-400 uppercase font-bold" class="text-gray-300 hover:text-pink-400 transition hover:underline"><span class="text-pink-400">#</span>projects</router-link>
-      <router-link to="/contact" active-class="text-pink-400 uppercase font-bold" class="text-gray-300 hover:text-pink-400 transition hover:underline"><span class="text-pink-400">#</span>about-me</router-link>
-      
-      <router-link to="#" active-class="text-pink-400 uppercase font-bold" class="text-gray-300 hover:text-pink-400 transition hover:underline"><span class="text-pink-400">#</span>tool</router-link>
-      <router-link to="#" active-class="text-pink-400 uppercase font-bold" class="text-gray-300 hover:text-pink-400 transition hover:underline"><span class="text-pink-400">#</span>other-skills</router-link>
 
-      <!-- Language -->
-      <div class="relative lang-menu">
-        <button @click.stop="openLang = !openLang" class="text-gray-300 hover:text-pink-400 transition hover:underline">EN ▾</button>
-        <div v-show="openLang" class="absolute left-1/2 -translate-x-1/2 mt-2 bg-neutral-900 border border-neutral-700 rounded-md text-xs z-50 min-w-20">
-          <button class="block px-4 py-2 hover:bg-neutral-800 w-full text-left">EN</button>
-          <button class="block px-4 py-2 hover:bg-neutral-800 w-full text-left">KH</button>
+      <!-- DESKTOP -->
+      <nav class="hidden md:flex justify-center items-center gap-9 text-md font-medium">
+
+          <router-link to="/" exact-active-class="text-[#ec4899] uppercase font-bold" :class="navText">
+            <span class="text-[#ec4899]">#</span>home
+          </router-link>
+
+          <router-link to="/projects" active-class="text-[#ec4899] uppercase font-bold" :class="navText">
+            <span class="text-[#ec4899]">#</span>projects
+          </router-link>
+
+          <router-link to="/contact" active-class="text-[#ec4899] uppercase font-bold" :class="navText">
+            <span class="text-[#ec4899]">#</span>about-me
+          </router-link>
+
+          <router-link to="#" :class="navText">
+            <span class="text-[#ec4899]">#</span>tool
+          </router-link>
+
+          <router-link to="#" :class="navText">
+            <span class="text-[#ec4899]">#</span>other-skills
+          </router-link>
+
+          <!-- LANGUAGE -->
+          <div class="relative lang-menu">
+          <button @click.stop="openLang = !openLang" :class="navText">EN ▾</button>
+
+          <div v-show="openLang"
+              class="absolute left-1/2 -translate-x-1/2 mt-2
+                      bg-black border border-[#ec4899]
+                      rounded-md text-xs z-50 min-w-20">
+
+          <button class="block px-4 py-2 hover:bg-[#ec4899] hover:text-black w-full text-left">EN</button>
+          <button class="block px-4 py-2 hover:bg-[#ec4899] hover:text-black w-full text-left">KH</button>
+
+          </div>
+          </div>
+
+          <!-- THEME -->
+          <button @click="toggleTheme" :class="navText">
+          {{ theme === "dark" ? "☀️" : "🌙" }}
+          </button>
+
+      </nav>
+
+      <!-- MOBILE TOP -->
+      <div class="flex md:hidden justify-between items-center px-4">
+        <span class="text-[#ec4899] font-semibold">#portfolio</span>
+        <div class="flex items-center gap-4">
+          <button @click="toggleTheme" class="text-[#ec4899]">{{ theme === "dark" ? "☀️" : "🌙" }}</button>
+          <button @click="openMenu = true" class="text-[#ec4899]">☰</button>
         </div>
       </div>
-    </nav>
 
-    <!-- MOBILE HEADER -->
-    <div class="flex md:hidden justify-between items-center px-4">
-      <span class="text-pink-400 font-semibold">#portfolio</span>
+      <!-- MOBILE SIDEBAR -->
+      <div v-show="openMenu" class="fixed inset-0 z-50 flex">
+        <div class="flex-1 bg-black/60" @click="openMenu = false"></div>
 
-      <button @click="openMenu = true" class="text-gray-300">
-        ☰
-      </button>
-    </div>
+        <div class="w-64 bg-black p-6 flex flex-col gap-6 text-sm">
 
-    <!-- MOBILE SIDEBAR -->
-    <div v-show="openMenu" class="fixed inset-0 z-50 flex">
-      <!-- overlay -->
-      <div class="flex-1 bg-black/60" @click="openMenu = false"></div>
+          <button class="self-end text-[#d1d5db]" @click="openMenu = false">✕</button>
 
-      <!-- drawer -->
-      <div class="w-64 bg-neutral-900 p-6 flex flex-col gap-6 text-sm">
-        <button class="self-end text-gray-400" @click="openMenu = false">✕</button>
+          <router-link @click="openMenu=false" to="/" :class="navText">
+            <span class="text-[#ec4899]">#</span>home
+          </router-link>
 
-        <router-link @click="openMenu = false" to="/" class="text-gray-300 hover:text-pink-400"><span class="text-pink-400">#</span>home</router-link>
-        <router-link @click="openMenu = false" to="/projects" class="text-gray-300 hover:text-pink-400"><span class="text-pink-400">#</span>projects</router-link>
-        <router-link @click="openMenu = false" to="/contact" class="text-gray-300 hover:text-pink-400"><span class="text-pink-400">#</span>about-me</router-link>
+          <router-link @click="openMenu=false" to="/projects" :class="navText">
+            <span class="text-[#ec4899]">#</span>projects
+          </router-link>
 
-        <div class="border-t border-neutral-700 pt-4">
-          <p class="text-xs text-gray-400 mb-2">Language</p>
-          <button class="block text-left text-gray-300 hover:text-pink-400">EN</button>
-          <button class="block text-left text-gray-300 hover:text-pink-400">KH</button>
+          <router-link @click="openMenu=false" to="/contact" :class="navText">
+            <span class="text-[#ec4899]">#</span>about-me
+          </router-link>
+
+          <button @click="toggleTheme" :class="navText" class="text-start">
+            {{ theme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode" }}
+          </button>
+
+          <div class="border-t border-[#ec4899]/40 pt-4">
+            <p class="text-xs text-[#d1d5db] mb-2">Language</p>
+            <button :class="navText" class="me-2">EN</button>
+            <button :class="navText">KH</button>
+          </div>
+
         </div>
       </div>
-    </div>
+
   </header>
 </template>

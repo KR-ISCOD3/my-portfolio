@@ -21,7 +21,7 @@
       <p class="text-pink-400 text-sm tracking-widest mb-4">HELLO, I AM</p>
 
       <h1 class="text-4xl md:text-6xl font-extrabold mb-4">
-        <span class="text-white">Rak</span>
+        <span :class="mainText">Rak</span>
         <span class="text-pink-400"> Smey</span>
       </h1>
 
@@ -51,11 +51,16 @@
 </template>
 
 <script setup>
+import { computed } from "vue"
+import { useTheme } from "../../composables/useTheme"
+
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { EffectCards, Autoplay } from "swiper/modules"
 
 import "swiper/css"
 import "swiper/css/effect-cards"
+
+const { theme } = useTheme()
 
 const modules = [EffectCards, Autoplay]
 
@@ -64,6 +69,15 @@ const images = [
   "/image/i2.png",
   "/image/i3.png",
 ]
+
+// ✅ theme-based text
+const mainText = computed(() =>
+  theme.value === "light" ? "text-black" : "text-white"
+)
+
+const subText = computed(() =>
+  theme.value === "light" ? "text-[#374151]" : "text-[#d1d5db]"
+)
 </script>
 
 <style scoped>

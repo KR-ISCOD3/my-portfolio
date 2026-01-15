@@ -25,11 +25,10 @@
         <span class="text-pink-400"> Smey</span>
       </h1>
 
-      <p class="text-gray-300 mb-8 mx-auto max-w-xl">
+      <p :class="['mb-8 mx-auto max-w-xl', subText]">
         A passionate <span class="text-pink-400">Web Developer</span>
         building modern, fast and beautiful web experiences.
       </p>
-
       <div class="flex justify-center gap-4 flex-wrap">
         <router-link
           to="/projects"

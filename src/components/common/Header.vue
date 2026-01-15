@@ -13,7 +13,7 @@
   /* ✅ THE ONLY NEW THING */
   const navText = computed(() =>
     theme.value === "light"
-      ? "text-[#ec4899] hover:text-[#d1d5db] transition"
+      ? "text-[#ec4899] hover:text-black transition"
       : "text-[#d1d5db] hover:text-[#ec4899] transition"
   )
 </script>

@@ -24,7 +24,7 @@ const subText =  computed(() =>
 </script>
 
 <template>
-<section class="py-20 px-6">
+<section class="py-15 px-4 md:px-6">
   <div class="max-w-6xl mx-auto">
 
     <!-- HEADER -->

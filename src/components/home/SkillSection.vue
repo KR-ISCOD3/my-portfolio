@@ -1,101 +1,42 @@
 <script setup>
 import { useTheme } from "../../composables/useTheme.js"
+import SkillCard from "../common/SkillCard.vue"
+
 const { theme } = useTheme()
+
+const skills = [
+  {
+    title: "Languages",
+    items: ["JavaScript", "TypeScript", "Python"]
+  },
+  {
+    title: "Frameworks",
+    items: ["React", "Next", "Express", "Flask", "Quart"]
+  },
+  {
+    title: "Other",
+    items: ["HTML CSS SASS SCSS", "Less Stylus EJS", "Jinja2 Pug"]
+  },
+  {
+    title: "Databases",
+    items: ["SQLite", "PostgreSQL", "MongoDB"]
+  },
+  {
+    title: "Tools",
+    items: ["Git", "Docker", "Figma", "Postman"]
+  }
+]
 </script>
 
 <template>
-  <section class="py-24 px-6">
-    <div class="max-w-7xl mx-auto">
-
-      <!-- HEADER -->
-      <div class="flex items-center gap-4 mb-14">
-        <h2 class="text-3xl font-bold" :class="theme === 'dark' ? 'text-white' : 'text-black'">
-          <span class="text-pink-400">#</span>skills
-        </h2>
-        <div class="flex-1 h-px bg-pink-400/40"></div>
+  <section class="py-10 px-4 md:px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center justify-start gap-4 mb-14">
+        <h2 class="text-3xl font-bold" :class="theme==='dark'?'text-white':'text-black'"><span class="text-pink-400">#</span>skills</h2>
       </div>
 
-      <!-- GRID (4 PER ROW) -->
-      <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-
-        <!-- CARD -->
-        <div
-          class="border p-6"
-          :class="theme === 'dark'
-            ? 'bg-neutral-900 border-neutral-700 text-gray-300'
-            : 'bg-white border-neutral-200 text-gray-700'"
-        >
-          <h3 class="font-semibold mb-4" :class="theme === 'dark' ? 'text-white' : 'text-black'">
-            Languages
-          </h3>
-          <p>JavaScript</p>
-          <p>TypeScript</p>
-          <p>Python</p>
-        </div>
-
-        <!-- CARD -->
-        <div
-          class="border p-6"
-          :class="theme === 'dark'
-            ? 'bg-neutral-900 border-neutral-700 text-gray-300'
-            : 'bg-white border-neutral-200 text-gray-700'"
-        >
-          <h3 class="font-semibold mb-4" :class="theme === 'dark' ? 'text-white' : 'text-black'">
-            Frameworks
-          </h3>
-          <p>React</p>
-          <p>Next</p>
-          <p>Express</p>
-          <p>Flask</p>
-          <p>Quart</p>
-        </div>
-
-        <!-- CARD -->
-        <div
-          class="border p-6"
-          :class="theme === 'dark'
-            ? 'bg-neutral-900 border-neutral-700 text-gray-300'
-            : 'bg-white border-neutral-200 text-gray-700'"
-        >
-          <h3 class="font-semibold mb-4" :class="theme === 'dark' ? 'text-white' : 'text-black'">
-            Other
-          </h3>
-          <p>HTML CSS SASS SCSS</p>
-          <p>Less Stylus EJS</p>
-          <p>Jinja2 Pug</p>
-        </div>
-
-        <!-- CARD -->
-        <div
-          class="border p-6"
-          :class="theme === 'dark'
-            ? 'bg-neutral-900 border-neutral-700 text-gray-300'
-            : 'bg-white border-neutral-200 text-gray-700'"
-        >
-          <h3 class="font-semibold mb-4" :class="theme === 'dark' ? 'text-white' : 'text-black'">
-            Tools
-          </h3>
-          <p>Git</p>
-          <p>Docker</p>
-          <p>Figma</p>
-          <p>Postman</p>
-        </div>
-
-        <!-- 🔥 5TH CARD (GOES TO NEXT ROW) -->
-        <div
-          class="border p-6"
-          :class="theme === 'dark'
-            ? 'bg-neutral-900 border-neutral-700 text-gray-300'
-            : 'bg-white border-neutral-200 text-gray-700'"
-        >
-          <h3 class="font-semibold mb-4" :class="theme === 'dark' ? 'text-white' : 'text-black'">
-            Databases
-          </h3>
-          <p>SQLite</p>
-          <p>PostgreSQL</p>
-          <p>MongoDB</p>
-        </div>
-
+      <div class="columns-1 sm:columns-2 lg:columns-4 gap-6 masonry-start">
+        <SkillCard v-for="(skill,i) in skills" :key="i" :title="skill.title" :items="skill.items" />
       </div>
     </div>
   </section>
